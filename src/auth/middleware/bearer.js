@@ -12,7 +12,7 @@ module.exports = async (req, res, next) => {
 
       // demo mistake... oops.  "this" has no context, AND await was missing
       // let validUser =  this.authenticateBearer(token);
-      let validUser = await UsersModel.authenticateBearer(token);
+      let validUser =  await UsersModel.authenticateBearer(token);
       if (validUser){
         // console.log('in valid user', validUser);
         req.user = validUser;
