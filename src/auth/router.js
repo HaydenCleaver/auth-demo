@@ -8,7 +8,7 @@ const basicAuth = require('./middleware/basic');
 
 // define a signup route to Create new user in database
 router.post('/signup', async (req, res, next) => {
-  console.log('I am here');
+  // console.log('I am here');
   try {
     let { username, password } = req.body;
     let encryptedPassword = await bcrypt.hash(password, 5);
