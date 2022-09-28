@@ -30,9 +30,11 @@ app.get('/hello', basicAuth, (req, res, next) => {
 app.get('/users', bearerAuth, async (req, res, next) => {
   console.log('from the users get route', req.user);
   let user = await UsersModel.findAll();
-  // use ris an unresolved promise that contains
+
+  // demo mistake: user was an unresolved promise that containing an error.  which is an object.  which evaluates as truthy
   let payload = {
     results: user,
+    token: req.token,
   };
 
   res.status(200).send(payload);

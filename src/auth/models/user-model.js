@@ -42,8 +42,9 @@ const UsersModel = sequelizeDatabase.define('Users', {
     get(){ // a method that "gets" called on "read"
       return jwt.sign({username: this.username}, SECRET, {expiresIn: 86400000});
     },
-    set(){ // a method that runs when set with "="
-      return jwt.sign({username: this.username}, SECRET, {expiresIn: 86400000});
+    set(token){ // a method that runs when set with "="
+      let tokenObj = jwt.sign(token, SECRET, {expiresIn: 86400000});
+      return tokenObj;
     },
   },
 });
@@ -57,7 +58,7 @@ const UsersModel = sequelizeDatabase.define('Users', {
 // for your own edification.... do we need this maybe / maybe not
 UsersModel.authenticateBasic = async (username, password)=> {
   try {
-    const user = await this.findOne({where: { username}});
+    const user = await UsersModel.findOne({where: { username}});
     const valid = await bcrypt.compare(password, user.password);
     if (valid){
       return  user;
@@ -71,9 +72,9 @@ UsersModel.authenticateBasic = async (username, password)=> {
 UsersModel.authenticateBearer = async (token) => {
   try {
     let payload = jwt.verify(token, SECRET);
-    console.log('from authenticateBearer', payload);
+    // console.log('from authenticateBearer', payload);
 
-    const user = await this.findOne({where: {username: payload.username}});
+    const user = await UsersModel.findOne({where: {username: payload.username}});
     if(user){
       return user;
     }

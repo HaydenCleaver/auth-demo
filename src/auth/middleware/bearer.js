@@ -8,11 +8,15 @@ module.exports = async (req, res, next) => {
   } else {
     try {
       let token = req.headers.authorization.split(' ').pop();
-      console.log('from bearer middleware', token);
+      // console.log('from bearer middleware', token);
 
-      let validUser = UsersModel.authenticateBearer(token);
+      // demo mistake... oops.  "this" has no context, AND await was missing
+      // let validUser =  this.authenticateBearer(token);
+      let validUser = await UsersModel.authenticateBearer(token);
       if (validUser){
+        // console.log('in valid user', validUser);
         req.user = validUser;
+        req.token = validUser.token;
         next();
       }
     } catch (e){
